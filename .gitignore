@@ -6,3 +6,6 @@
 # scratch
 *.tmp
 /tmp/
+
+# game reference (copyright Forgotten Empires/Microsoft; local only)
+/refs/game/

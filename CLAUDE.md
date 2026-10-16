@@ -10,9 +10,10 @@ Random Map Scripts (RMS) для Age of Empires II: DE. Автор — Илья �
 ## Структура
 
 ```
-maps/    .rms — сами карты (первый: arabia-open.rms)
-docs/    ТЗ и разборы; требования — docs/arabia-open.tz.md
-refs/    референсные карты и выписки
+maps/       .rms — сами карты (первый: arabia-open.rms)
+docs/       ТЗ и разборы; требования — docs/arabia-open.tz.md
+refs/       референсные карты и выписки
+knowledge/  база инженерных знаний (OKF v0.2); правила — AGENTS.md
 ```
 
 ## Язык и инструменты
@@ -62,3 +63,10 @@ Issues репо `aoe-rms-lsp` (там трекер).
   указывает на локальный путь `aoe-rms-lsp/editors/claude-code` —
   машинозависимо: на другой машине маркетплейс нужно зарегистрировать заново
   (`claude plugin marketplace add <путь>/aoe-rms-lsp/editors/claude-code`).
+
+## База знаний
+
+Инженерные знания проекта живут в `knowledge/` (формат OKF v0.2). Правила её
+ведения — «Использование базы знаний» в `AGENTS.md`.
+
+@AGENTS.md
