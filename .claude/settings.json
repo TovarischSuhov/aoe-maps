@@ -1,0 +1,5 @@
+{
+  "enabledPlugins": {
+    "aoe2-lsp@aoe2-local": true
+  }
+}
