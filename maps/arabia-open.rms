@@ -70,9 +70,10 @@
  *     STONE_SECONDARY (блоки и их #define), −299 строк; раскиданные кучи
  *     даёт механизм *_ADDITIONAL;
  *   - доп. кучи на игрока: золото 4 группы, камень 3, олени 6, мелочь 5
- *     (было по 1); расстояния и разлёт уже отвечали ТЗ;
+ *     (было по 1); дичь раздвинута — кучи своего типа spacing 28 (было 20),
+ *     олени↔мелочь радиус спейсер-зоны 16 (было 8); дистанции от ТЦ по ТЗ;
  *   - овцы: снята доп. отара (HERDABLE_GROUPS 2→0) — остаётся одна.
- * Файл — 11 199 строк.
+ * Файл — 11 207 строк.
  */
 
 /*
@@ -9035,6 +9036,13 @@ actor_area_radius HERDABLE_ADDITIONAL_ACTOR_AREA_RADIUS
 		/* arabia-open: доп. мелочь — 5 групп/игрок (было 1) */
 		#const HUNTABLE_SMALL_ADDITIONAL_GROUPS 5
 		#const HUNTABLE_SMALL_ADDITIONAL_DISTANCE rnd(36,40)
+
+		/* arabia-open: кучи дичи не лепятся — свой тип 20 → 28 (спейсинг),
+		   олени↔мелочь 8 → 16 (радиус спейсер-зоны, через avoid_actor_area) */
+		#const HUNTABLE_ADDITIONAL_SPACING 28
+		#const HUNTABLE_SMALL_ADDITIONAL_SPACING 28
+		#const HUNTABLE_ADDITIONAL_ACTOR_AREA_RADIUS 16
+		#const HUNTABLE_SMALL_ADDITIONAL_ACTOR_AREA_RADIUS 16
 
 		/* ==== begin inlined includes/huntable.inc ==== */
 /* Default Values */
