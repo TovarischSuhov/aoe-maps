@@ -20,3 +20,4 @@ okf_version: "0.2"
 
 * [Проверка карты](/runbooks/verification.md) — LSP-прогон через `cmd/corpus`, разбор диагностик, проверка в игре
 * [Фиксация странностей LSP](/runbooks/lsp-diagnostics.md) — как оформить воспроизводимый пример в `docs/lsp-issues.md` и завести баг-репорт
+* [Сборка и публикация карты модом](/runbooks/publishing.md) — структура `info.json`/`resources`, правила zip, локальная проверка, поля портала

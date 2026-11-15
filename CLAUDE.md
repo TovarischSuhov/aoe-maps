@@ -10,7 +10,9 @@ Random Map Scripts (RMS) для Age of Empires II: DE. Автор — Илья �
 ## Структура
 
 ```
-maps/       .rms — сами карты (первый: arabia-open.rms)
+maps/       .rms — сами карты (arabia-open.rms, StandartRandom.rms)
+mod/        исходники модов: info.json, описания, превью, build.sh
+dist/       собранные пакеты модов (генерируется, в git не идёт)
 docs/       ТЗ и разборы; требования — docs/arabia-open.tz.md
 refs/       референсные карты и выписки
 knowledge/  база инженерных знаний (OKF v0.2); правила — AGENTS.md

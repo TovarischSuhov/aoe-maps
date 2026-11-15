@@ -1,0 +1,312 @@
+/* StandartRandom.rms — Random из 99 стандартных карт AoE2: DE.
+ *
+ * Карты не копируются: каждая подключается из установки игры через
+ * #include_drs (резолв по имени из resources/_common/drs/gamedata_x2/).
+ * Рандом только выбирает #define; #include_drs стоит в ветках if,
+ * чтобы не вкладывать start_random в start_random.
+ *
+ * 99 ветвей по 1 % — ровно предел percent_chance (сумма 99).
+ * Источник имён файлов: resources/_common/dat/maps.json.
+ */
+
+start_random
+	percent_chance 1 #define PICK_001
+	percent_chance 1 #define PICK_002
+	percent_chance 1 #define PICK_003
+	percent_chance 1 #define PICK_004
+	percent_chance 1 #define PICK_005
+	percent_chance 1 #define PICK_006
+	percent_chance 1 #define PICK_007
+	percent_chance 1 #define PICK_008
+	percent_chance 1 #define PICK_009
+	percent_chance 1 #define PICK_010
+	percent_chance 1 #define PICK_011
+	percent_chance 1 #define PICK_012
+	percent_chance 1 #define PICK_013
+	percent_chance 1 #define PICK_014
+	percent_chance 1 #define PICK_015
+	percent_chance 1 #define PICK_016
+	percent_chance 1 #define PICK_017
+	percent_chance 1 #define PICK_018
+	percent_chance 1 #define PICK_019
+	percent_chance 1 #define PICK_020
+	percent_chance 1 #define PICK_021
+	percent_chance 1 #define PICK_022
+	percent_chance 1 #define PICK_023
+	percent_chance 1 #define PICK_024
+	percent_chance 1 #define PICK_025
+	percent_chance 1 #define PICK_026
+	percent_chance 1 #define PICK_027
+	percent_chance 1 #define PICK_028
+	percent_chance 1 #define PICK_029
+	percent_chance 1 #define PICK_030
+	percent_chance 1 #define PICK_031
+	percent_chance 1 #define PICK_032
+	percent_chance 1 #define PICK_033
+	percent_chance 1 #define PICK_034
+	percent_chance 1 #define PICK_035
+	percent_chance 1 #define PICK_036
+	percent_chance 1 #define PICK_037
+	percent_chance 1 #define PICK_038
+	percent_chance 1 #define PICK_039
+	percent_chance 1 #define PICK_040
+	percent_chance 1 #define PICK_041
+	percent_chance 1 #define PICK_042
+	percent_chance 1 #define PICK_043
+	percent_chance 1 #define PICK_044
+	percent_chance 1 #define PICK_045
+	percent_chance 1 #define PICK_046
+	percent_chance 1 #define PICK_047
+	percent_chance 1 #define PICK_048
+	percent_chance 1 #define PICK_049
+	percent_chance 1 #define PICK_050
+	percent_chance 1 #define PICK_051
+	percent_chance 1 #define PICK_052
+	percent_chance 1 #define PICK_053
+	percent_chance 1 #define PICK_054
+	percent_chance 1 #define PICK_055
+	percent_chance 1 #define PICK_056
+	percent_chance 1 #define PICK_057
+	percent_chance 1 #define PICK_058
+	percent_chance 1 #define PICK_059
+	percent_chance 1 #define PICK_060
+	percent_chance 1 #define PICK_061
+	percent_chance 1 #define PICK_062
+	percent_chance 1 #define PICK_063
+	percent_chance 1 #define PICK_064
+	percent_chance 1 #define PICK_065
+	percent_chance 1 #define PICK_066
+	percent_chance 1 #define PICK_067
+	percent_chance 1 #define PICK_068
+	percent_chance 1 #define PICK_069
+	percent_chance 1 #define PICK_070
+	percent_chance 1 #define PICK_071
+	percent_chance 1 #define PICK_072
+	percent_chance 1 #define PICK_073
+	percent_chance 1 #define PICK_074
+	percent_chance 1 #define PICK_075
+	percent_chance 1 #define PICK_076
+	percent_chance 1 #define PICK_077
+	percent_chance 1 #define PICK_078
+	percent_chance 1 #define PICK_079
+	percent_chance 1 #define PICK_080
+	percent_chance 1 #define PICK_081
+	percent_chance 1 #define PICK_082
+	percent_chance 1 #define PICK_083
+	percent_chance 1 #define PICK_084
+	percent_chance 1 #define PICK_085
+	percent_chance 1 #define PICK_086
+	percent_chance 1 #define PICK_087
+	percent_chance 1 #define PICK_088
+	percent_chance 1 #define PICK_089
+	percent_chance 1 #define PICK_090
+	percent_chance 1 #define PICK_091
+	percent_chance 1 #define PICK_092
+	percent_chance 1 #define PICK_093
+	percent_chance 1 #define PICK_094
+	percent_chance 1 #define PICK_095
+	percent_chance 1 #define PICK_096
+	percent_chance 1 #define PICK_097
+	percent_chance 1 #define PICK_098
+	percent_chance 1 #define PICK_099
+end_random
+
+if PICK_001
+	#include_drs Arabia.rms
+elseif PICK_002
+	#include_drs Archipelago.rms
+elseif PICK_003
+	#include_drs Baltic.rms
+elseif PICK_004
+	#include_drs Black_Forest.rms
+elseif PICK_005
+	#include_drs Coastal.rms
+elseif PICK_006
+	#include_drs Continental.rms
+elseif PICK_007
+	#include_drs Crater_Lake.rms
+elseif PICK_008
+	#include_drs Fortress.rms
+elseif PICK_009
+	#include_drs Gold_Rush.rms
+elseif PICK_010
+	#include_drs Highland.rms
+elseif PICK_011
+	#include_drs Islands.rms
+elseif PICK_012
+	#include_drs Mediterranean.rms
+elseif PICK_013
+	#include_drs Migration.rms
+elseif PICK_014
+	#include_drs Rivers.rms
+elseif PICK_015
+	#include_drs Team_Islands.rms
+elseif PICK_016
+	#include_drs Scandanavia.rms
+elseif PICK_017
+	#include_drs Mongolia.rms
+elseif PICK_018
+	#include_drs Yucatan.rms
+elseif PICK_019
+	#include_drs Salt_Marsh.rms
+elseif PICK_020
+	#include_drs Arena.rms
+elseif PICK_021
+	#include_drs Oasis.rms
+elseif PICK_022
+	#include_drs Ghost_Lake.rms
+elseif PICK_023
+	#include_drs nomad.rms
+elseif PICK_024
+	#include_drs Canals.rms
+elseif PICK_025
+	#include_drs Capricious.rms
+elseif PICK_026
+	#include_drs Dingos.rms
+elseif PICK_027
+	#include_drs Metropolis.rms
+elseif PICK_028
+	#include_drs Moats.rms
+elseif PICK_029
+	#include_drs Seasons.rms
+elseif PICK_030
+	#include_drs Shipwreck.rms
+elseif PICK_031
+	#include_drs "Team Glaciers.rms"
+elseif PICK_032
+	#include_drs acropolis.rms2
+elseif PICK_033
+	#include_drs budapest.rms2
+elseif PICK_034
+	#include_drs cenotes.rms2
+elseif PICK_035
+	#include_drs cityoflakes.rms2
+elseif PICK_036
+	#include_drs goldenpit.rms2
+elseif PICK_037
+	#include_drs hideout.rms2
+elseif PICK_038
+	#include_drs hillfort.rms2
+elseif PICK_039
+	#include_drs lombardia.rms2
+elseif PICK_040
+	#include_drs steppe.rms2
+elseif PICK_041
+	#include_drs valley.rms2
+elseif PICK_042
+	#include_drs Megarandom.rms2
+elseif PICK_043
+	#include_drs Kilimanjaro.rms
+elseif PICK_044
+	#include_drs "Mountain Pass.rms"
+elseif PICK_045
+	#include_drs "Nile Delta.rms"
+elseif PICK_046
+	#include_drs Serengeti.rms
+elseif PICK_047
+	#include_drs Socotra.rms
+elseif PICK_048
+	#include_drs Water_Nomad.rms
+elseif PICK_049
+	#include_drs Alpine_Lakes.rms
+elseif PICK_050
+	#include_drs Bogland.rms
+elseif PICK_051
+	#include_drs Mountain_Ridge.rms
+elseif PICK_052
+	#include_drs Ravines.rms
+elseif PICK_053
+	#include_drs Wolf_Hill.rms
+elseif PICK_054
+	#include_drs GoldenSwamp.rms
+elseif PICK_055
+	#include_drs FourLakes.rms
+elseif PICK_056
+	#include_drs LandNomad.rms
+elseif PICK_057
+	#include_drs AmazonTunnel.rms
+elseif PICK_058
+	#include_drs CoastalForest.rms
+elseif PICK_059
+	#include_drs AfricanClearing.rms
+elseif PICK_060
+	#include_drs Atacama.rms
+elseif PICK_061
+	#include_drs SeizeTheMountain.rms
+elseif PICK_062
+	#include_drs Crater.rms
+elseif PICK_063
+	#include_drs Crossroads.rms
+elseif PICK_064
+	#include_drs Michi.rms
+elseif PICK_065
+	#include_drs TeamMoats.rms
+elseif PICK_066
+	#include_drs VolcanicIsland.rms
+elseif PICK_067
+	#include_drs Acclivity.rms
+elseif PICK_068
+	#include_drs Eruption.rms
+elseif PICK_069
+	#include_drs FrigidLake.rms
+elseif PICK_070
+	#include_drs Greenland.rms
+elseif PICK_071
+	#include_drs Lowland.rms
+elseif PICK_072
+	#include_drs Marketplace.rms
+elseif PICK_073
+	#include_drs Meadow.rms
+elseif PICK_074
+	#include_drs MountainRange.rms
+elseif PICK_075
+	#include_drs NorthernIsles.rms
+elseif PICK_076
+	#include_drs RingFortress.rms
+elseif PICK_077
+	#include_drs Runestones.rms
+elseif PICK_078
+	#include_drs Aftermath.rms
+elseif PICK_079
+	#include_drs Enclosed.rms
+elseif PICK_080
+	#include_drs Haboob.rms
+elseif PICK_081
+	#include_drs Kawasan.rms
+elseif PICK_082
+	#include_drs LandMadness.rms
+elseif PICK_083
+	#include_drs SacredSprings.rms
+elseif PICK_084
+	#include_drs Wade.rms
+elseif PICK_085
+	#include_drs Morass.rms
+elseif PICK_086
+	#include_drs Shoals.rms
+elseif PICK_087
+	#include_drs Cliffbound.rms
+elseif PICK_088
+	#include_drs Isthmus.rms
+elseif PICK_089
+	#include_drs Dunesprings.rms
+elseif PICK_090
+	#include_drs Golden_Stream.rms
+elseif PICK_091
+	#include_drs Mountain_Dunes.rms
+elseif PICK_092
+	#include_drs River_Divide.rms
+elseif PICK_093
+	#include_drs Sandrift.rms
+elseif PICK_094
+	#include_drs Shrubland.rms
+elseif PICK_095
+	#include_drs The_Passage.rms
+elseif PICK_096
+	#include_drs Hollow_Woodlands.rms
+elseif PICK_097
+	#include_drs Karsts.rms
+elseif PICK_098
+	#include_drs Glade.rms
+elseif PICK_099
+	#include_drs fortified_clearing.rms
+endif

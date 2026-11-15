@@ -1,0 +1,137 @@
+<p><b>StandartRandom</b> — один Random Map-скрипт, который выбирает одну из <b>99 стандартных карт Age of Empires II: Definitive Edition</b>.</p>
+
+<p>Карты не копируются: скрипт подключает штатные .rms из установки игры по имени через #include_drs и случайно выбирает, какая из них загрузится. Поэтому карты всегда соответствуют текущему патчу, а файлы игры не распространяются.</p>
+
+<p><b>Как это работает</b></p>
+<ul>
+<li>99 карт, у каждой шанс 1% — 99 ветвей, предел системы процентов RMS.</li>
+<li>Только стандартные random-карты: без Battle Royale, Escalation Mode и Capture the Relic.</li>
+<li>MegaRandom включён — изредка получается рандом внутри рандома.</li>
+<li>Работает на любом размере карты и числе игроков, которые поддерживает выбранная стандартная карта.</li>
+</ul>
+
+<p><b>Состав</b></p>
+<ul>
+<li>Arabia</li>
+<li>Archipelago</li>
+<li>Baltic</li>
+<li>Black Forest</li>
+<li>Coastal</li>
+<li>Continental</li>
+<li>Crater Lake</li>
+<li>Fortress</li>
+<li>Gold Rush</li>
+<li>Highland</li>
+<li>Islands</li>
+<li>Mediterranean</li>
+<li>Migration</li>
+<li>Rivers</li>
+<li>Team Islands</li>
+<li>Scandinavia</li>
+<li>Mongolia</li>
+<li>Yucatan</li>
+<li>Salt Marsh</li>
+<li>Arena</li>
+<li>Oasis</li>
+<li>Ghost Lake</li>
+<li>Nomad</li>
+<li>Canals</li>
+<li>Capricious</li>
+<li>Dingos</li>
+<li>Metropolis</li>
+<li>Moats</li>
+<li>Seasons</li>
+<li>Shipwreck</li>
+<li>Team Glaciers</li>
+<li>Acropolis</li>
+<li>Budapest</li>
+<li>Cenotes</li>
+<li>City of Lakes</li>
+<li>Golden Pit</li>
+<li>Hideout</li>
+<li>Hill Fort</li>
+<li>Lombardia</li>
+<li>Steppe</li>
+<li>Valley</li>
+<li>MegaRandom</li>
+<li>Kilimanjaro</li>
+<li>Mountain Pass</li>
+<li>Nile Delta</li>
+<li>Serengeti</li>
+<li>Socotra</li>
+<li>Water Nomad</li>
+<li>Alpine Lakes</li>
+<li>Bogland</li>
+<li>Mountain Ridge</li>
+<li>Ravines</li>
+<li>Wolf Hill</li>
+<li>Golden Swamp</li>
+<li>Four Lakes</li>
+<li>Land Nomad</li>
+<li>Amazon Tunnel</li>
+<li>Coastal Forest</li>
+<li>African Clearing</li>
+<li>Atacama</li>
+<li>Seize The Mountain</li>
+<li>Crater</li>
+<li>Crossroads</li>
+<li>Michi</li>
+<li>Team Moats</li>
+<li>Volcanic Island</li>
+<li>Acclivity</li>
+<li>Eruption</li>
+<li>Frigid Lake</li>
+<li>Greenland</li>
+<li>Lowland</li>
+<li>Marketplace</li>
+<li>Meadow</li>
+<li>Mountain Range</li>
+<li>Northern Isles</li>
+<li>Ring Fortress</li>
+<li>Runestones</li>
+<li>Aftermath</li>
+<li>Enclosed</li>
+<li>Haboob</li>
+<li>Kawasan</li>
+<li>Land Madness</li>
+<li>Sacred Springs</li>
+<li>Wade</li>
+<li>Morass</li>
+<li>Shoals</li>
+<li>Cliffbound</li>
+<li>Isthmus</li>
+<li>Dunesprings</li>
+<li>Golden Stream</li>
+<li>Mountain Dunes</li>
+<li>River Divide</li>
+<li>Sandrift</li>
+<li>Shrubland</li>
+<li>The Passage</li>
+<li>Hollow Woodlands</li>
+<li>Karsts</li>
+<li>Glade</li>
+<li>Fortified Clearing</li>
+</ul>
+
+<p><b>Чего нет</b></p>
+<p>28 стандартных карт из самых новых и нишевых частей пула не вошли, чтобы уложиться в лимит 99 ветвей. Все они по-прежнему доступны как обычные стандартные карты.</p>
+
+<p><b>Совместимость</b></p>
+<ul>
+<li>Age of Empires II: Definitive Edition, актуальная версия.</li>
+<li>Random map; одиночная игра и мультиплеер.</li>
+<li>Мод (или тот же .rms) нужен всем игрокам в лобби. Подключаемые стандартные карты есть в базовой игре.</li>
+</ul>
+
+<p><b>Установка</b></p>
+<p>Подпишитесь на мод, включите его в меню Mods и выберите <b>StandartRandom</b> в списке карт.</p>
+<p>Вручную: положите StandartRandom.rms в resources/_common/random-map-scripts/ в папке профиля игры.</p>
+
+<p><b>Удаление</b></p>
+<p>Отключите или отпишите мод. При ручной установке удалите StandartRandom.rms.</p>
+
+<p><b>Благодарности</b></p>
+<p>Скрипты стандартных карт © Forgotten Empires / Microsoft. Оригинальная работа — только обёртка, выбирающая карту; автор — Илья Сухов (TovarischSuhov). Файлы игры не распространяются.</p>
+
+<p><b>Изменения</b></p>
+<p>0.1.0 — первый релиз: 99 стандартных карт, по 1%.</p>

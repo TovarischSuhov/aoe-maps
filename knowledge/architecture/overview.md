@@ -16,11 +16,17 @@ verified:
 
 # Устройство проекта и цикл работы над картой
 
-`aoe-maps` — репозиторий Random Map Scritps (RMS) для Age of Empires II: DE.
-Единственный текущий проект — **открытая Аравия** (`arabia-open`): переработка
-еды, золота и камня стандартной Аравии так, чтобы карта игралась открыто и
-вынуждала агрессивный феодал. Кандидат на площадку rusaok. Требования —
-`docs/arabia-open.tz.md` (см. [контракт требований](/contracts/arabia-open-requirements.md)).
+`aoe-maps` — репозиторий Random Map Scripts (RMS) для Age of Empires II: DE.
+Два проекта:
+
+- **открытая Аравия** (`arabia-open`): переработка еды, золота и камня
+  стандартной Аравии так, чтобы карта игралась открыто и вынуждала агрессивный
+  феодал. Кандидат на площадку rusaok. Требования — `docs/arabia-open.tz.md`
+  (см. [контракт требований](/contracts/arabia-open-requirements.md)).
+- **StandartRandom**: Random из 99 стандартных карт DE; карты не копируются, а
+  подключаются через `#include_drs`. Исходник — `maps/StandartRandom.rms`,
+  мод — `mod/StandartRandom/` (см.
+  [публикацию](/runbooks/publishing.md)).
 
 ## Каталоги
 
@@ -33,6 +39,8 @@ verified:
   официальная Аравия из игры (`refs/game/`); каталог в `.gitignore` — файлы
   игры не коммитятся (см. ниже).
 - `docs/` — ТЗ, разборы, журнал наблюдений за LSP (`docs/lsp-issues.md`).
+- `mod/<имя>/` — исходники мода (описание, `info.json`, превью, сборка);
+  `dist/` — собранный пакет и zip, в git не идёт.
 - `knowledge/` — база инженерных знаний (формат OKF v0.2; правила ведения — в
   `AGENTS.md`).
 
