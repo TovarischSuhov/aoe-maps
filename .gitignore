@@ -12,3 +12,6 @@
 
 # assembled mod packages
 /dist/
+
+# game-derived publication artwork (local only)
+/mod/StandartRandom/thumbnail-icons.jpg

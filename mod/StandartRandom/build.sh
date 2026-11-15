@@ -15,7 +15,12 @@ esac
 rm -rf -- "$out"
 mkdir -p -- "$out/resources/_common/random-map-scripts"
 cp -- "$root/maps/$name.rms" "$out/resources/_common/random-map-scripts/$name.rms"
-cp -- "$here/info.json" "$here/README.txt" "$here/thumbnail.jpg" "$out/"
+cp -- "$here/info.json" "$here/README.txt" "$out/"
+thumb="$here/thumbnail.jpg"
+if [ -f "$here/thumbnail-icons.jpg" ]; then
+	thumb="$here/thumbnail-icons.jpg"
+fi
+cp -- "$thumb" "$out/thumbnail.jpg"
 (cd -- "$out" && zip -qr "../$name.zip" .)
 
 printf 'dir: %s\nzip: %s\n' "$out" "$root/dist/$name.zip"
