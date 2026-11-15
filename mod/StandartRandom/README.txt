@@ -26,7 +26,8 @@ Notes
 - Random map; single-player and multiplayer.
 - Every player in a lobby needs the mod (or the same .rms file). The
   referenced standard maps are part of the base game.
-- MegaRandom is included, so occasionally you get a random inside a random.
+- MegaRandom is intentionally excluded: this script is already a random pick,
+  so a second layer of randomness was not wanted.
 
 Credits
 -------

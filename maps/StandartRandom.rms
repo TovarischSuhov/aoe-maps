@@ -194,7 +194,7 @@ elseif PICK_040
 elseif PICK_041
 	#include_drs valley.rms2
 elseif PICK_042
-	#include_drs Megarandom.rms2
+	#include_drs Graveyards.rms
 elseif PICK_043
 	#include_drs Kilimanjaro.rms
 elseif PICK_044

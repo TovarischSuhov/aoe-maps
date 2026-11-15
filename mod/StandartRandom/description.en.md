@@ -6,7 +6,6 @@
 <ul>
 <li>99 maps, each with a 1% chance — 99 branches, the maximum the RMS percentage system supports.</li>
 <li>Only standard random-style maps: no Battle Royale, Escalation Mode or Capture the Relic.</li>
-<li>MegaRandom is included, so occasionally you get a random inside a random.</li>
 <li>Works with any map size and player count that the chosen standard map supports.</li>
 </ul>
 
@@ -53,7 +52,7 @@
 <li>Lombardia</li>
 <li>Steppe</li>
 <li>Valley</li>
-<li>MegaRandom</li>
+<li>Graveyards</li>
 <li>Kilimanjaro</li>
 <li>Mountain Pass</li>
 <li>Nile Delta</li>
@@ -114,7 +113,7 @@
 </ul>
 
 <p><b>Not included</b></p>
-<p>28 standard maps from the newest and most niche parts of the pool were left out to stay within the 99-branch limit. All of them remain available as normal standard maps.</p>
+<p>28 standard maps from the newest and most niche parts of the pool were left out to stay within the 99-branch limit. All of them remain available as normal standard maps. MegaRandom is excluded on purpose: this script is already a random pick, so a second layer of randomness was not wanted.</p>
 
 <p><b>Compatibility</b></p>
 <ul>
