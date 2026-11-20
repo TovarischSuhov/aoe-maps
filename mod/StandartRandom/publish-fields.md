@@ -1,8 +1,18 @@
 # StandartRandom — поля для публикации
 
-Версия: 0.1.0. Пакет собирается `mod/StandartRandom/build.sh`:
-`dist/StandartRandom/` (распакованный мод) и `dist/StandartRandom.zip`
-(архив для загрузки; корень архива — `resources/`, без обёрточной папки).
+Версия: 0.2.0 — **уже опубликована** вручную 18.11.2026:
+[ageofempires.com/mods/details/583593](https://www.ageofempires.com/mods/details/583593/)
+(modId **583593**, gameTitleId 2, тег 15 «Random Maps»). Пакет собирается
+`mod/StandartRandom/build.sh`: `dist/StandartRandom/` (распакованный мод)
+и `dist/StandartRandom.zip` (архив для загрузки; корень архива —
+`resources/`, без обёрточной папки). В пакете шесть `.rms` семейства
+StandartRandom. Записи Changelog для портала — в `changelog.md` (EN
+основная, RU дублируется).
+
+Обновление уже опубликованного мода автоматизируется инструментом
+`tools/publish-mod.mjs` (сайт-API `api.ageofempires.com`, нужен cookie
+сессии) — процедура и формат запроса в
+[автоматизации публикации](/runbooks/publishing-automation.md).
 
 ## In-game Mod Manager (My Mods → Publish Mod)
 
@@ -25,11 +35,11 @@
 | Author | `Ilya Sukhov (TovarischSuhov)` |
 | Category | Maps |
 | Tags | Random Map, Standard Maps, Maps, Multiplayer |
-| Version | `0.1.0` |
+| Version | `0.2.0` |
 | Thumbnail | `thumbnail.jpg` (1280×720, JPEG) |
 | ZIP | `dist/StandartRandom.zip` |
 | Description | `description.en.md` (англ.) или `description.ru.md` (рус.) |
-| Changelog | `0.1.0 — first release: 99 standard maps, 1% each.` |
+| Changelog | запись 0.2.0 из `changelog.md` (готовые EN/RU варианты) |
 | Credits | `Standard map scripts © Forgotten Empires / Microsoft. Wrapper script by Ilya Sukhov (TovarischSuhov). No game files are redistributed.` |
 
 Описание на сайте поддерживает HTML; переносы строк — через `<p>`/`<br>`,

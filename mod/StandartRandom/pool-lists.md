@@ -1,0 +1,292 @@
+<!-- Генерируется tools/generate-specialized.mjs (2026-11-18); не править руками.
+     Описания мода получают те же списки между маркерами AUTO:POOL_LISTS. -->
+
+## StandartRandom — общая (100 карт)
+
+- Arabia
+- Archipelago
+- Baltic
+- Black Forest
+- Coastal
+- Continental
+- Crater Lake
+- Fortress
+- Gold Rush
+- Highland
+- Islands
+- Mediterranean
+- Migration
+- Rivers
+- Team Islands
+- Scandinavia
+- Mongolia
+- Yucatan
+- Salt Marsh
+- Arena
+- Oasis
+- Ghost Lake
+- Nomad
+- Canals
+- Capricious
+- Dingos
+- Metropolis
+- Moats
+- Seasons
+- Shipwreck
+- Team Glaciers
+- Acropolis
+- Budapest
+- Cenotes
+- City of Lakes
+- Golden Pit
+- Hideout
+- Hill Fort
+- Lombardia
+- Steppe
+- Valley
+- Graveyards
+- Kilimanjaro
+- Mountain Pass
+- Nile Delta
+- Serengeti
+- Socotra
+- Water Nomad
+- Alpine Lakes
+- Bogland
+- Mountain Ridge
+- Ravines
+- Wolf Hill
+- Golden Swamp
+- Four Lakes
+- Land Nomad
+- Amazon Tunnel
+- Coastal Forest
+- African Clearing
+- Atacama
+- Seize The Mountain
+- Crater
+- Crossroads
+- Michi
+- Team Moats
+- Volcanic Island
+- Acclivity
+- Eruption
+- Frigid Lake
+- Greenland
+- Lowland
+- Marketplace
+- Meadow
+- Mountain Range
+- Northern Isles
+- Ring Fortress
+- Runestones
+- Aftermath
+- Enclosed
+- Haboob
+- Kawasan
+- Land Madness
+- Sacred Springs
+- Wade
+- Morass
+- Shoals
+- Cliffbound
+- Isthmus
+- Dunesprings
+- Golden Stream
+- Mountain Dunes
+- River Divide
+- Sandrift
+- Shrubland
+- The Passage
+- Hollow Woodlands
+- Karsts
+- Glade
+- Fortified Clearing
+- Aquarena
+
+## StandartOpenRandom — «открытые» (94 карты)
+
+- Arabia
+- Baltic
+- Coastal
+- Gold Rush
+- Mediterranean
+- Scandinavia
+- Mongolia
+- Yucatan
+- Salt Marsh
+- Oasis
+- Ghost Lake
+- Nomad
+- Canals
+- Capricious
+- Dingos
+- Graveyards
+- Metropolis
+- Moats
+- Paradise Island
+- Pilgrims
+- Prairie
+- Seasons
+- Sherwood Forest
+- Shipwreck
+- Team Glaciers
+- Acropolis
+- Cenotes
+- Golden Pit
+- Hill Fort
+- Lombardia
+- Steppe
+- Valley
+- Kilimanjaro
+- Serengeti
+- Socotra
+- Bog Islands
+- Water Nomad
+- Alpine Lakes
+- Bogland
+- Mountain Ridge
+- Ravines
+- Wolf Hill
+- Golden Swamp
+- Four Lakes
+- Coastal Forest
+- African Clearing
+- Atacama
+- Seize The Mountain
+- Crater
+- Crossroads
+- Volcanic Island
+- Acclivity
+- Eruption
+- Frigid Lake
+- Lowland
+- Marketplace
+- Meadow
+- Mountain Range
+- Runestones
+- Aftermath
+- Haboob
+- Kawasan
+- Land Madness
+- Sacred Springs
+- Wade
+- Morass
+- Shoals
+- Cliffbound
+- Isthmus
+- Dunesprings
+- Golden Stream
+- Mountain Dunes
+- Sandrift
+- Shrubland
+- Hollow Woodlands
+- Karsts
+- Glade
+- Border Dispute
+- Graupel
+- Stranded
+- Sardis
+- Chaos Pit
+- Mired
+- Murkwood
+- Crownwood
+- Dorothea Quarry
+- Glacis
+- Hengehold
+- Loch Ness
+- Rampart
+- Stonefront
+- Thames
+- Vulpine
+- Arabian Desert
+
+## StandartNomadRandom — «номадские» (14 карт)
+
+- Nomad
+- Pilgrims
+- Shipwreck
+- Steppe
+- Mountain Pass
+- Nile Delta
+- Water Nomad
+- Bogland
+- Land Nomad
+- African Clearing
+- Graupel
+- Stranded
+- Mired
+- Murkwood
+
+## StandartCloseRandom — «закрытые» (12 карт)
+
+- Black Forest
+- Fortress
+- Arena
+- Hideout
+- Mangrove Jungle
+- Sandbank
+- Amazon Tunnel
+- Michi
+- Team Moats
+- Ring Fortress
+- Enclosed
+- Fortified Clearing
+
+## StandartWaterRandom — «водные» (12 карт)
+
+- Archipelago
+- Baltic
+- Crater Lake
+- Islands
+- Migration
+- Team Islands
+- Pacific Islands
+- Sandbank
+- Northern Isles
+- Isthmus
+- The Passage
+- Aquarena
+
+## StandartHybridRandom — «гибридные» (40 карт)
+
+- Coastal
+- Continental
+- Highland
+- Mediterranean
+- Rivers
+- Scandinavia
+- Nomad
+- Canals
+- Capricious
+- Dingos
+- Metropolis
+- Paradise Island
+- Pilgrims
+- Seasons
+- Shipwreck
+- Team Glaciers
+- Budapest
+- City of Lakes
+- Hamburger
+- Nile Delta
+- Bog Islands
+- Mangrove Jungle
+- Water Nomad
+- Golden Swamp
+- Four Lakes
+- Coastal Forest
+- Crossroads
+- Volcanic Island
+- Frigid Lake
+- Greenland
+- Kawasan
+- Shoals
+- Dunesprings
+- Golden Stream
+- River Divide
+- Graupel
+- Stranded
+- Murkwood
+- Dorothea Quarry
+- Loch Ness

@@ -1,0 +1,57 @@
+/* StandartCloseRandom.rms — случайная «закрытые» карта из стандартного пула AoE2: DE.
+ *
+ * Сгенерировано tools/generate-specialized.mjs из resources/_common/dat/maps.json
+ * (2026-11-18). Пул: style=random, все карты с флагом closed из maps.json
+ * (пересечения допустимы: карта с несколькими флагами играет в нескольких
+ * подборках).
+ * Закрытые land-only карты без флагов в maps.json (ручная
+ * раскладка по характеру геймплея): hideout.rms2, TeamMoats.rms, RingFortress.rms, Enclosed.rms, fortified_clearing.rms.
+ * Исключены: megarandom, EM* (quickplay/Empire Wars), CtR* (Capture the Relic).
+ *
+ * Карты не копируются: каждая подключается из установки игры через
+ * #include_drs (резолв по имени из resources/_common/drs/gamedata_x2/).
+ * percent_chance — эксклюзивный выбор, сумма ровно 100: одна карта на партию
+ * гарантирована (идиом официальных скриптов — Arabia.rms, MegaRandom.rms2).
+ * В пуле 12 карт; доли 8–9% разбросаны равномерно.
+ */
+
+start_random
+	percent_chance 8 #define PICK_001
+	percent_chance 9 #define PICK_002
+	percent_chance 8 #define PICK_003
+	percent_chance 8 #define PICK_004
+	percent_chance 9 #define PICK_005
+	percent_chance 8 #define PICK_006
+	percent_chance 8 #define PICK_007
+	percent_chance 9 #define PICK_008
+	percent_chance 8 #define PICK_009
+	percent_chance 8 #define PICK_010
+	percent_chance 9 #define PICK_011
+	percent_chance 8 #define PICK_012
+end_random
+
+if PICK_001
+	#include_drs Black_Forest.rms
+elseif PICK_002
+	#include_drs Fortress.rms
+elseif PICK_003
+	#include_drs Arena.rms
+elseif PICK_004
+	#include_drs hideout.rms2
+elseif PICK_005
+	#include_drs Mangrove_Jungle.rms
+elseif PICK_006
+	#include_drs Sandbank.rms
+elseif PICK_007
+	#include_drs AmazonTunnel.rms
+elseif PICK_008
+	#include_drs Michi.rms
+elseif PICK_009
+	#include_drs TeamMoats.rms
+elseif PICK_010
+	#include_drs RingFortress.rms
+elseif PICK_011
+	#include_drs Enclosed.rms
+elseif PICK_012
+	#include_drs fortified_clearing.rms
+endif

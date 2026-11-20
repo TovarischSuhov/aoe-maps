@@ -1,0 +1,794 @@
+#includeXS FrozenLake.xs
+
+#const CENTER_ROAD_WIDTH 12
+#const SHORE_WIDTH 5
+#const WATER_WIDTH 5
+
+/* Outer snow-ring radius scales with the map side (DE sizes in tiles: Tiny
+   120, Small 144, Medium 168, Large 200, Huge 220, Gigantic 240, Ludikris
+   480). Linear fit anchored at the play-verified Huge configuration:
+   ring = ~23 + side * 0.105 (Small 38, Medium 42, Large 45, Huge 48,
+   Gigantic 50, Ludikris 74). Tiny is hand-tuned (ring 30): with the default
+   land_percent the 1v1 player blobs are so large they would overlap any
+   ring that fits the map edge — Tiny also shrinks base_size and
+   land_percent (see create_player_lands). The inner zones keep fixed
+   widths: road 12, shore 5, water 5, so
+   island = ring - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH. */
+#const RING_TINY 30
+#const RING_SMALL 38
+#const RING_MEDIUM 42
+#const RING_LARGE 45
+#const RING_HUGE 48
+#const RING_GIGANTIC 50
+#const RING_LUDIKRIS 74
+
+#const DIRT_MUD 76
+
+#const ARMY_TENT 1200
+
+<PLAYER_SETUP>
+random_placement
+ai_info_map_type ARABIA 0 0 0
+
+effect_amount GAIA_SET_ATTRIBUTE WILD_PENGUIN ATTR_HITPOINTS 45
+effect_amount GAIA_SET_ATTRIBUTE WILD_PENGUIN ATTR_REGENERATION_RATE 30
+effect_amount GAIA_SET_ATTRIBUTE WILD_PENGUIN ATTR_ARMOR 1027
+
+effect_amount GAIA_SET_ATTRIBUTE ARMY_TENT ATTR_HITPOINTS 9999
+effect_amount GAIA_SET_ATTRIBUTE ARMY_TENT ATTR_REGENERATION_RATE 9999
+
+effect_amount GAIA_SET_ATTRIBUTE ARMY_TENT ATTR_ARMOR 968
+effect_amount GAIA_SET_ATTRIBUTE ARMY_TENT ATTR_ARMOR 1224
+
+effect_amount GAIA_SET_ATTRIBUTE OUTPOST ATTR_LINE_OF_SIGHT 20
+
+<LAND_GENERATION>
+base_terrain SNOW_FOREST
+base_layer SNOW
+
+/* The lake scales with the map size: the outer snow-ring radius per size is
+   RING_*, inner zones derive by fixed widths (12/5/5). On Tiny the ring
+   reaches the player home zones — intended. */
+if TINY_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_TINY
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_TINY - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_TINY - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_TINY - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+elseif SMALL_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_SMALL
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_SMALL - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_SMALL - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_SMALL - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+elseif MEDIUM_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_MEDIUM
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_MEDIUM - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_MEDIUM - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_MEDIUM - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+elseif LARGE_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_LARGE
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_LARGE - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_LARGE - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_LARGE - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+elseif GIGANTIC_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_GIGANTIC
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_GIGANTIC - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_GIGANTIC - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_GIGANTIC - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+elseif LUDIKRIS_MAP
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_LUDIKRIS
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_LUDIKRIS - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_LUDIKRIS - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_LUDIKRIS - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+else
+create_land {
+  terrain_type SNOW
+  land_position 50 50
+  base_size RING_HUGE
+  land_percent 0
+  set_circular_base
+  border_fuzziness 10
+  zone 111
+  land_id 111
+}
+create_land {
+  terrain_type ICYSHORE
+  land_position 50 50
+  base_size (RING_HUGE - CENTER_ROAD_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type WATER
+  land_position 50 50
+  base_size (RING_HUGE - CENTER_ROAD_WIDTH - SHORE_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+create_land {
+  terrain_type DLC_FORESTSNOWAUTUMN
+  land_position 50 50
+  base_size (RING_HUGE - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+  land_percent 0
+  set_circular_base
+}
+endif
+
+/* clearing at the lake center for the frost aura carrier */
+create_land {
+  terrain_type DIRT_MUD
+  land_position 50 50
+  base_size 5
+  land_percent 0
+  land_id 123
+}
+
+/* Player lands: circle radius grows on small maps so the home zones stay
+   clear of the lake ring; on Tiny the blobs themselves shrink (1v1 splits
+   land_percent 35 into ~17.5% per player — far too large for a 120-tile
+   map). The lake ring must never reach the home zones. */
+if TINY_MAP
+create_player_lands {
+  terrain_type                     GRASS_SNOW
+  land_percent                     20
+  base_size                        10
+  circle_radius                    41 3
+  border_fuzziness                 30
+  other_zone_avoidance_distance    7
+}
+elseif SMALL_MAP
+create_player_lands {
+  terrain_type                     GRASS_SNOW
+  land_percent                     35
+  base_size                        14
+  circle_radius                    43 4
+  border_fuzziness                 30
+  other_zone_avoidance_distance    7
+}
+elseif MEDIUM_MAP
+create_player_lands {
+  terrain_type                     GRASS_SNOW
+  land_percent                     35
+  base_size                        14
+  circle_radius                    40 5
+  border_fuzziness                 30
+  other_zone_avoidance_distance    7
+}
+else
+create_player_lands {
+  terrain_type                     GRASS_SNOW
+  land_percent                     35
+  base_size                        14
+  circle_radius                    38 5
+  border_fuzziness                 30
+  other_zone_avoidance_distance    7
+}
+endif
+
+<OBJECTS_GENERATION>
+/* default units generation */
+create_object TOWN_CENTER {
+  set_place_for_every_player
+  max_distance_to_players 0
+  min_distance_to_players 0
+}
+
+create_object VILLAGER {
+  set_place_for_every_player
+  max_distance_to_players 6
+  min_distance_to_players 6
+}
+
+create_object SCOUT {
+  set_place_for_every_player
+  min_distance_to_players 7
+  max_distance_to_players 9
+}
+
+/* regicide config */
+if REGICIDE
+create_object KING {
+  set_place_for_every_player
+  min_distance_to_players 6
+  max_distance_to_players 6
+}
+
+create_object HOUSE {
+  set_place_for_every_player
+  max_distance_to_players 8
+  min_distance_to_players 8
+}
+endif
+
+/* Default resources */
+/* Main gold */
+create_object GOLD {
+  number_of_objects 7
+  number_of_groups 1
+  set_place_for_every_player
+  set_tight_grouping
+  set_gaia_object_only
+  min_distance_to_players 12
+  max_distance_to_players 16
+  set_circular_placement
+  min_distance_group_placement 8
+  max_distance_to_other_zones 12
+  resource_delta rnd(-100,100)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+/* Far gold */
+create_object GOLD {
+  number_of_objects 5
+  number_of_groups 2
+  set_place_for_every_player
+  set_tight_grouping
+  set_gaia_object_only
+  min_distance_to_players 20
+  max_distance_to_players 26
+  set_circular_placement
+  min_distance_group_placement 7
+  max_distance_to_other_zones 10
+  resource_delta rnd(-100,100)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object STONE {
+  number_of_objects 5
+  number_of_groups 1
+  set_place_for_every_player
+  set_tight_grouping
+  set_gaia_object_only
+  min_distance_to_players 14
+  max_distance_to_players 18
+  set_circular_placement
+  min_distance_group_placement 7
+  max_distance_to_other_zones 10
+  resource_delta rnd(-50,50)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object STONE {
+  number_of_objects 4
+  number_of_groups 1
+  set_place_for_every_player
+  set_tight_grouping
+  set_gaia_object_only
+  min_distance_to_players 16
+  max_distance_to_players 20
+  set_circular_placement
+  min_distance_group_placement 7
+  max_distance_to_other_zones 10
+  resource_delta rnd(-50,50)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object BOAR {
+  number_of_objects 1
+  number_of_groups 2
+  set_place_for_every_player
+  set_gaia_object_only
+  min_distance_to_players 12
+  max_distance_to_players 16
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-50,50)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object DEER {
+  number_of_objects 4
+  number_of_groups 1
+  set_place_for_every_player
+  set_gaia_object_only
+  set_loose_grouping
+  min_distance_to_players 18
+  max_distance_to_players 22
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-20,20)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object DEER {
+  number_of_objects 2
+  number_of_groups 2
+  set_place_for_every_player
+  set_gaia_object_only
+  set_loose_grouping
+  min_distance_to_players 22
+  max_distance_to_players 24
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-20,20)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object LLAMA_B {
+  number_of_objects 4
+  number_of_groups 1
+  set_place_for_every_player
+  set_tight_grouping
+  min_distance_to_players 10
+  max_distance_to_players 14
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-20,20)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+  set_gaia_object_only
+}
+
+create_object LLAMA_B {
+  number_of_objects 2
+  number_of_groups 2
+  set_place_for_every_player
+  set_tight_grouping
+  min_distance_to_players 16
+  max_distance_to_players 20
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-20,20)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+  set_gaia_object_only
+}
+
+create_object FORAGE {
+  number_of_objects rnd(6,8)
+  number_of_groups 1
+  set_place_for_every_player
+  set_gaia_object_only
+  set_tight_grouping
+  min_distance_to_players 14
+  max_distance_to_players 18
+  set_circular_placement
+  min_distance_group_placement 7
+  resource_delta rnd(-20,20)
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object ARCTIC_FOX {
+  number_of_objects 2
+  number_of_groups 2
+  set_place_for_every_player
+  set_gaia_object_only
+  min_distance_to_players 20
+  max_distance_to_players 24
+  set_circular_placement
+  min_distance_group_placement 7
+  terrain_to_place_on GRASS_SNOW
+  resource_delta rnd(-10,10)
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object ARCTIC_WOLF {
+  number_of_objects 1
+  number_of_groups 2
+  set_place_for_every_player
+  set_gaia_object_only
+  min_distance_to_players 22
+  max_distance_to_players 26
+  set_circular_placement
+  min_distance_group_placement 7
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object RELIC {
+  min_distance_to_players 30
+  min_distance_group_placement 10
+  number_of_objects 1
+  set_place_for_every_player
+  set_gaia_object_only
+  set_circular_placement
+  terrain_to_place_on GRASS_SNOW
+  find_closest
+  enable_tile_shuffling
+  require_path 1
+}
+
+create_object SNOW_PINE_TREE {
+  set_place_for_every_player
+  set_gaia_object_only
+  number_of_groups 5
+  min_distance_to_players 5
+  find_closest
+  enable_tile_shuffling
+  set_loose_grouping
+  set_circular_placement
+  max_distance_to_other_zones 2
+  avoid_forest_zone 2
+  avoid_cliff_zone 2
+
+  actor_area 60
+  actor_area_radius 3
+
+  avoid_actor_area 10 /* Town Centres */
+  avoid_actor_area 20 /* Villagers */
+  avoid_actor_area 21 /* Villagers, Additional A */
+  avoid_actor_area 22 /* Villagers, Additional B */
+  avoid_actor_area 30 /* Scout */
+  avoid_actor_area 31 /* Scout, Secondary */
+  avoid_actor_area 32 /* Scout, Tertiary */
+  avoid_actor_area 50 /* Walls */
+  avoid_actor_area 51 /* Walls, Second Layer */
+  avoid_actor_area 52 /* Walls, Third Layer */
+  avoid_actor_area 60 /* Straggler, Spawn */
+
+  avoid_actor_area 5100 /* King */
+}
+
+/* misc objects */
+
+if TINY_MAP
+  create_actor_area 60 60 1234 RING_TINY
+  create_actor_area 60 60 1235 (RING_TINY - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+elseif SMALL_MAP
+  create_actor_area 72 72 1234 RING_SMALL
+  create_actor_area 72 72 1235 (RING_SMALL - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+elseif MEDIUM_MAP
+  create_actor_area 84 84 1234 RING_MEDIUM
+  create_actor_area 84 84 1235 (RING_MEDIUM - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+elseif LARGE_MAP
+  create_actor_area 100 100 1234 RING_LARGE
+  create_actor_area 100 100 1235 (RING_LARGE - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+elseif GIGANTIC_MAP
+  create_actor_area 120 120 1234 RING_GIGANTIC
+  create_actor_area 120 120 1235 (RING_GIGANTIC - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+elseif LUDIKRIS_MAP
+  create_actor_area 240 240 1234 RING_LUDIKRIS
+  create_actor_area 240 240 1235 (RING_LUDIKRIS - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+else
+  create_actor_area 110 110 1234 RING_HUGE
+  create_actor_area 110 110 1235 (RING_HUGE - CENTER_ROAD_WIDTH - SHORE_WIDTH - WATER_WIDTH)
+endif
+
+create_object SHORE_FISH {
+  number_of_objects rnd(5,7)
+  set_scaling_to_player_number
+  set_gaia_object_only
+  temp_min_distance_group_placement 6
+  terrain_to_place_on WATER
+  resource_delta rnd(-50,50)
+}
+
+create_object RELIC {
+  temp_min_distance_group_placement 10
+  number_of_objects 1
+  set_scaling_to_player_number
+  set_gaia_object_only
+  terrain_to_place_on SNOW
+}
+
+create_object GOLD {
+  number_of_objects 3
+  number_of_groups 2
+  set_scaling_to_player_number
+  terrain_to_place_on SNOW
+  set_gaia_object_only
+  set_tight_grouping
+  temp_min_distance_group_placement 6
+  resource_delta rnd(-100,100)
+}
+
+create_object STONE {
+  number_of_objects 3
+  number_of_groups 1
+  set_scaling_to_player_number
+  terrain_to_place_on SNOW
+  set_gaia_object_only
+  set_tight_grouping
+  temp_min_distance_group_placement 6
+  resource_delta rnd(-50,50)
+}
+
+create_object WILD_PENGUIN {
+  number_of_objects 1
+  number_of_groups 3
+  set_scaling_to_player_number
+  actor_area_to_place_in 1234
+  set_gaia_object_only
+  avoid_actor_area 1235
+  temp_min_distance_group_placement 6
+}
+
+#const BIRD_COUNT 2
+
+create_object BIRD_A
+{
+  number_of_objects (BIRD_COUNT * 1.5)
+  set_scaling_to_map_size
+  temp_min_distance_group_placement 6
+}
+
+create_object BIRD_B
+{
+  number_of_objects BIRD_COUNT
+  set_scaling_to_map_size
+  temp_min_distance_group_placement 6
+}
+
+/* object to create frost aura */
+
+create_object ARMY_TENT {
+  number_of_objects 1
+  set_gaia_object_only
+  ignore_terrain_restrictions
+  set_gaia_unconvertible
+  find_closest_to_map_center
+  enable_tile_shuffling
+  place_on_specific_land_id 123
+}
+
+create_object OUTPOST {
+  number_of_objects 3
+  set_gaia_object_only
+  ignore_terrain_restrictions
+  set_gaia_unconvertible
+  find_closest_to_map_center
+  set_scaling_to_player_number
+  enable_tile_shuffling
+  terrain_to_place_on SNOW
+  temp_min_distance_group_placement 7
+  set_circular_placement
+  make_indestructible
+}
+
+<CONNECTION_GENERATION>
+create_connect_land_zones -9 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -8 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -7 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -6 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -5 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -4 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -3 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}
+
+create_connect_land_zones -2 111 {
+  replace_terrain SNOW_FOREST GRASS_SNOW
+  terrain_cost SNOW_FOREST 15
+  terrain_cost SNOW 5
+  terrain_cost GRASS_SNOW 5
+  terrain_size GRASS_SNOW 6 1
+}

@@ -1,0 +1,1463 @@
+#includeXS SilentWoods.xs
+
+/* SilentWoods - open temperate-woods map with a day/night cycle.
+   Nights: dark color mood + wolf packs emerging from cave rocks on hills.
+   This file is assembled in parts; see docs/silentwoods-review.md for the
+   open questions and the in-game verification plan. */
+
+#const ARMY_TENT 1200 /* FrozenLake-style gaia tent - the cave anchor building */
+#const PLACEHOLDER_INVISIBLE 1543 /* on-grid placeholder, alternative to 1902 */
+
+<PLAYER_SETUP>
+random_placement
+ai_info_map_type ARABIA 0 0 0
+
+/* Night wolves: boosted sight so the packs spot villagers from the caves.
+   The spawns are Arctic Wolf (1965) - the confirmed wolf id in game; the
+   classic WOLF constant resolved to a villager-like unit via xsCreateUnit. */
+effect_amount GAIA_SET_ATTRIBUTE ARCTIC_WOLF ATTR_LINE_OF_SIGHT 12
+
+/* DE map sizes (side in tiles): Tiny 120, Small 144, Medium 168, Large 200,
+   Huge 220, Gigantic 240, Ludikris 480. Fixed-count blocks multiply by
+   SIZE_FACTOR below; percent-based blocks (forests) scale on their own.
+   Lives inside PLAYER_SETUP: after #includeXS the LSP rejects a bare
+   top-level if (see docs/lsp-issues.md), and this section ordering keeps
+   SIZE_FACTOR defined before the later sections use it. */
+if TINY_MAP
+	#const SIZE_FACTOR 1
+	#const CAVE_HILL_R 4
+	#const DEER_GROUPS 1
+elseif SMALL_MAP
+	#const SIZE_FACTOR 2
+	#const CAVE_HILL_R 4
+	#const DEER_GROUPS 1
+elseif MEDIUM_MAP
+	#const SIZE_FACTOR 3
+	#const CAVE_HILL_R 4
+	#const DEER_GROUPS 2
+elseif LARGE_MAP
+	#const SIZE_FACTOR 4
+	#const CAVE_HILL_R 4
+	#const DEER_GROUPS 2
+elseif HUGE_MAP
+	#const SIZE_FACTOR 5
+	#const CAVE_HILL_R 4
+	#const DEER_GROUPS 3
+elseif GIGANTIC_MAP
+	#const SIZE_FACTOR 6
+	#const CAVE_HILL_R 5
+	#const DEER_GROUPS 3
+else /* LUDIKRIS_MAP */
+	#const SIZE_FACTOR 24
+	#const CAVE_HILL_R 6
+	#const DEER_GROUPS 4
+endif
+
+/* Player count as a numeric const (math expressions need numbers, not
+   condition labels). */
+if 1_PLAYER_GAME
+	#const PLAYER_COUNT 1
+elseif 2_PLAYER_GAME
+	#const PLAYER_COUNT 2
+elseif 3_PLAYER_GAME
+	#const PLAYER_COUNT 3
+elseif 4_PLAYER_GAME
+	#const PLAYER_COUNT 4
+elseif 5_PLAYER_GAME
+	#const PLAYER_COUNT 5
+elseif 6_PLAYER_GAME
+	#const PLAYER_COUNT 6
+elseif 7_PLAYER_GAME
+	#const PLAYER_COUNT 7
+else /* 8 players */
+	#const PLAYER_COUNT 8
+endif
+
+/* Player-count flags for the cave triples (three cave hills per player:
+   gold, stone, gold). Conditions accept only a single label (no
+   comparisons in RMS), so every bigger lobby additionally defines the
+   next triple flag. */
+if 1_PLAYER_GAME
+elseif 2_PLAYER_GAME
+	#define P_C6
+elseif 3_PLAYER_GAME
+	#define P_C6
+	#define P_C9
+elseif 4_PLAYER_GAME
+	#define P_C6
+	#define P_C9
+	#define P_C12
+elseif 5_PLAYER_GAME
+	#define P_C6
+	#define P_C9
+	#define P_C12
+	#define P_C15
+elseif 6_PLAYER_GAME
+	#define P_C6
+	#define P_C9
+	#define P_C12
+	#define P_C15
+	#define P_C18
+elseif 7_PLAYER_GAME
+	#define P_C6
+	#define P_C9
+	#define P_C12
+	#define P_C15
+	#define P_C18
+	#define P_C21
+else /* 8 players */
+	#define P_C6
+	#define P_C9
+	#define P_C12
+	#define P_C15
+	#define P_C18
+	#define P_C21
+	#define P_C24
+endif
+
+<LAND_GENERATION>
+base_terrain GRASS
+
+/* Player starts: grass blobs raised one elevation step - starts on hills. */
+create_player_lands
+{
+	terrain_type GRASS
+	number_of_tiles 1400
+	base_size 16
+	base_elevation 3
+	clumping_factor 15
+	other_zone_avoidance_distance 2
+}
+
+/* Cave hills: three per player (gold, stone, gold), gated by the
+   player-count triple flags (P_C* from PLAYER_SETUP). Each hilltop has a
+   small dark dirt cap and carries a rock with a 3-tile pile
+   (OBJECTS_GENERATION, land_id 201..224). Raised one step above the
+   player starts; hill radius is compact (CAVE_HILL_R). */
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 201
+	land_id 201
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 202
+	land_id 202
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 203
+	land_id 203
+}
+if P_C6
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 204
+	land_id 204
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 205
+	land_id 205
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 206
+	land_id 206
+}
+endif
+if P_C9
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 207
+	land_id 207
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 208
+	land_id 208
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 209
+	land_id 209
+}
+endif
+if P_C12
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 210
+	land_id 210
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 211
+	land_id 211
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 212
+	land_id 212
+}
+endif
+if P_C15
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 213
+	land_id 213
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 214
+	land_id 214
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 215
+	land_id 215
+}
+endif
+if P_C18
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 216
+	land_id 216
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 217
+	land_id 217
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 218
+	land_id 218
+}
+endif
+if P_C21
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 219
+	land_id 219
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 220
+	land_id 220
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 221
+	land_id 221
+}
+endif
+if P_C24
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 222
+	land_id 222
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 223
+	land_id 223
+}
+create_land
+{
+	terrain_type DIRT
+	base_size CAVE_HILL_R
+	land_percent 0
+	base_elevation 4
+	set_circular_base
+	other_zone_avoidance_distance 12
+	zone 224
+	land_id 224
+}
+endif
+
+<ELEVATION_GENERATION>
+/* Scattered hills one step above ground over the whole map; balanced
+   placement keeps clumps off the (already raised) player starts. */
+create_elevation 4
+{
+	enable_balanced_elevation
+	base_terrain GRASS
+	number_of_tiles (1300 * SIZE_FACTOR)
+	number_of_clumps (36 * SIZE_FACTOR)
+}
+
+<TERRAIN_GENERATION>
+/* Open woods: forest arrives in patches, kept away from the starts. */
+create_terrain FOREST
+{
+	base_terrain GRASS
+	land_percent 20
+	number_of_clumps 20
+	set_scale_by_groups
+	set_avoid_player_start_areas
+	spacing_to_other_terrain_types 6
+}
+
+/* Scattered single trees everywhere to sell the "open woods" look. */
+create_terrain FOREST
+{
+	base_terrain GRASS
+	number_of_tiles 64
+	number_of_clumps 3
+	clumping_factor rnd(20, 40)
+	set_scale_by_groups
+	set_avoid_player_start_areas
+	spacing_to_other_terrain_types 6
+}
+
+/* Cosmetic ground variety. No DIRT here on purpose: the cave hill caps
+   must stay the only DIRT terrain on the map, so cave piles can never
+   drift off the cave hills (terrain_to_place_on DIRT). */
+create_terrain GRASS2
+{
+	base_terrain GRASS
+	land_percent 6
+	number_of_clumps 20
+	set_scale_by_groups
+	terrain_mask 1
+}
+create_terrain GRASS3
+{
+	base_terrain GRASS
+	land_percent 4
+	number_of_clumps 14
+	set_scale_by_groups
+	terrain_mask 1
+}
+
+<OBJECTS_GENERATION>
+/* Default starting units (the engine does not place them itself). */
+create_object TOWN_CENTER {
+	set_place_for_every_player
+	max_distance_to_players 0
+	min_distance_to_players 0
+}
+
+create_object VILLAGER {
+	set_place_for_every_player
+	max_distance_to_players 6
+	min_distance_to_players 6
+}
+
+create_object SCOUT {
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+
+/* regicide config */
+if REGICIDE
+create_object KING {
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+create_object HOUSE {
+	set_place_for_every_player
+	max_distance_to_players 8
+	min_distance_to_players 8
+}
+endif
+
+/* Starting resources, standard set (block style borrowed from FrozenLake).
+   Every pile below is player-anchored. The neutral (map-wide) gold and
+   stone are NOT scattered: they live on the cave hills only (part 3),
+   caves being the expansion targets. */
+create_object FORAGE {
+	set_place_for_every_player
+	set_gaia_object_only
+	number_of_objects 6
+	number_of_groups 1
+	set_tight_grouping
+	min_distance_to_players 10
+	max_distance_to_players 14
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-20, 20)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Main gold */
+create_object GOLD {
+	number_of_objects 7
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 12
+	max_distance_to_players 16
+	set_circular_placement
+	min_distance_group_placement 8
+	resource_delta rnd(-100, 100)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Secondary gold, player-anchored */
+create_object GOLD {
+	number_of_objects 4
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 18
+	max_distance_to_players 24
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-100, 100)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Tertiary gold, player-anchored; the home cave rock and marker land in
+   the same distance band below. */
+create_object GOLD {
+	number_of_objects 4
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 22
+	max_distance_to_players 28
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-100, 100)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Single stone pile near the base */
+create_object STONE {
+	number_of_objects 5
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 12
+	max_distance_to_players 18
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-50, 50)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Secondary stone, player-anchored */
+create_object STONE {
+	number_of_objects 4
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 16
+	max_distance_to_players 22
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-50, 50)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Near flock */
+create_object SHEEP {
+	number_of_objects 4
+	number_of_groups 1
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 8
+	max_distance_to_players 12
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-20, 20)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Two far flocks of two */
+create_object SHEEP {
+	number_of_objects 2
+	number_of_groups 2
+	set_place_for_every_player
+	set_tight_grouping
+	set_gaia_object_only
+	min_distance_to_players 14
+	max_distance_to_players 22
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-20, 20)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Two boars to lure */
+create_object BOAR {
+	number_of_objects 1
+	number_of_groups 2
+	set_place_for_every_player
+	set_gaia_object_only
+	min_distance_to_players 12
+	max_distance_to_players 16
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-50, 50)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Starting deer pack */
+create_object DEER {
+	number_of_objects 4
+	number_of_groups 1
+	set_place_for_every_player
+	set_gaia_object_only
+	set_loose_grouping
+	min_distance_to_players 18
+	max_distance_to_players 24
+	set_circular_placement
+	min_distance_group_placement 7
+	resource_delta rnd(-20, 20)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Neutral deer packs: DEER_GROUPS loose groups per player (scales with
+   the map size), scattered map-wide. */
+create_object DEER {
+	number_of_objects 4
+	number_of_groups DEER_GROUPS
+	set_scaling_to_player_number
+	set_gaia_object_only
+	set_loose_grouping
+	min_distance_to_players 26
+	set_circular_placement
+	min_distance_group_placement 10
+	resource_delta rnd(-20, 20)
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Relics: five in a 1v1 (standard Arabia counts and spacing, corpus
+   038__Arabia.rms), +1 per extra player; terrain/path constraints make
+   them reachable. */
+create_object RELIC {
+	number_of_objects (3 + PLAYER_COUNT)
+	set_gaia_object_only
+	min_distance_to_players 25
+	temp_min_distance_group_placement 20
+	terrain_to_place_on GRASS
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+}
+
+/* Scattered cave hills (lands 201..224): a mossy rock on the dirt cap
+   with a fixed 3-tile pile beside it, triple per player - gold, stone,
+   gold. These are the only neutral gold/stone sources on the map. */
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 201
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 201
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 202
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 202
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 203
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 203
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+if P_C6
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 204
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 204
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 205
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 205
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 206
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 206
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C9
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 207
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 207
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 208
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 208
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 209
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 209
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C12
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 210
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 210
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 211
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 211
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 212
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 212
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C15
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 213
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 213
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 214
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 214
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 215
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 215
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C18
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 216
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 216
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 217
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 217
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 218
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 218
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C21
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 219
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 219
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 220
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 220
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 221
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 221
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+if P_C24
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 222
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 222
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 223
+	find_closest
+	enable_tile_shuffling
+}
+create_object STONE {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 223
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-50, 50)
+}
+create_object ROCK_MOSSY {
+	number_of_objects 1
+	set_gaia_object_only
+	place_on_specific_land_id 224
+	find_closest
+	enable_tile_shuffling
+}
+create_object GOLD {
+	number_of_objects 3
+	number_of_groups 1
+	set_tight_grouping
+	set_gaia_object_only
+	place_on_specific_land_id 224
+	terrain_to_place_on DIRT
+	find_closest
+	enable_tile_shuffling
+	resource_delta rnd(-100, 100)
+}
+endif
+
+/* Cave tents: one indestructible gaia army tent per cave land,
+   gated by the same player-count triples as the lands. Buildings are dat
+   type 80 - the only gaia buildings on the map, hence the enumerable
+   wolf-spawn anchors. */
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 201
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 202
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 203
+	make_indestructible
+}
+if P_C6
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 204
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 205
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 206
+	make_indestructible
+}
+endif
+if P_C9
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 207
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 208
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 209
+	make_indestructible
+}
+endif
+if P_C12
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 210
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 211
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 212
+	make_indestructible
+}
+endif
+if P_C15
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 213
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 214
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 215
+	make_indestructible
+}
+endif
+if P_C18
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 216
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 217
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 218
+	make_indestructible
+}
+endif
+if P_C21
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 219
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 220
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 221
+	make_indestructible
+}
+endif
+if P_C24
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 222
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 223
+	make_indestructible
+}
+create_object ARMY_TENT {
+	number_of_objects 1
+	set_gaia_object_only
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	find_closest
+	enable_tile_shuffling
+	place_on_specific_land_id 224
+	make_indestructible
+}
+endif
+
+/* Home cave: ONE rock per player in the far-gold band (22-28) - every
+   Mossy Rock is a wolf-spawning cave in XS, so the old 3-rock cluster
+   would mean three packs at home. ignore_terrain_restrictions: the rock
+   is tree-class and was silently dropped on GRASS without it. The rock
+   reserves actor_area 402; the home outpost is placed INTO that area
+   (buildings respect actor areas - the official barracks/house pattern),
+   so the tower stands right at the cave rock. */
+create_object ROCK_MOSSY {
+	set_place_for_every_player
+	set_gaia_object_only
+	number_of_objects 1
+	min_distance_to_players 22
+	max_distance_to_players 28
+	find_closest
+	enable_tile_shuffling
+	require_path 1
+	ignore_terrain_restrictions
+	actor_area 402
+	actor_area_radius 3
+}
+/* Home cave tent: per player, placed inside the home rock's area.
+   set_gaia_unconvertible is REQUIRED here like on the scattered ones -
+   without it monks can convert the tower (in-game finding, 2026-11-21). */
+create_object ARMY_TENT {
+	set_place_for_every_player
+	set_gaia_object_only
+	number_of_objects 1
+	actor_area_to_place_in 402
+	find_closest
+	require_path 1
+	ignore_terrain_restrictions
+	set_gaia_unconvertible
+	make_indestructible
+}

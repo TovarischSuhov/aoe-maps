@@ -1,11 +1,14 @@
-/* StandartRandom.rms — Random из 99 стандартных карт AoE2: DE.
+/* StandartRandom.rms — Random из 100 стандартных карт AoE2: DE.
  *
  * Карты не копируются: каждая подключается из установки игры через
  * #include_drs (резолв по имени из resources/_common/drs/gamedata_x2/).
  * Рандом только выбирает #define; #include_drs стоит в ветках if,
  * чтобы не вкладывать start_random в start_random.
  *
- * 99 ветвей по 1 % — ровно предел percent_chance (сумма 99).
+ * 100 ветвей по 1 %; сумма ровно 100 — percent_chance выбор эксклюзивный,
+ * при сумме < 100 часть партий оставалась бы без карты (идиом официальных
+ * скриптов: Arabia.rms, MegaRandom.rms2). Aquarena добавлена 2026-11-18 —
+ * появилась в игре после сборки исходного списка из 99.
  * Источник имён файлов: resources/_common/dat/maps.json.
  */
 
@@ -109,6 +112,7 @@ start_random
 	percent_chance 1 #define PICK_097
 	percent_chance 1 #define PICK_098
 	percent_chance 1 #define PICK_099
+	percent_chance 1 #define PICK_100
 end_random
 
 if PICK_001
@@ -309,4 +313,6 @@ elseif PICK_098
 	#include_drs Glade.rms
 elseif PICK_099
 	#include_drs fortified_clearing.rms
+elseif PICK_100
+	#include_drs Aquarena.rms
 endif

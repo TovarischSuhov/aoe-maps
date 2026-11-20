@@ -7,6 +7,9 @@
 *.tmp
 /tmp/
 
+# npm dependencies (tools/generate-map-icons.mjs: jpeg-js)
+/tools/node_modules/
+
 # game reference (copyright Forgotten Empires/Microsoft; local only)
 /refs/game/
 
@@ -15,3 +18,4 @@
 
 # game-derived publication artwork (local only)
 /mod/StandartRandom/thumbnail-icons.jpg
+.zcode/

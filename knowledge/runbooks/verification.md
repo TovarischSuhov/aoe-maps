@@ -37,6 +37,18 @@ go run ./cmd/corpus -bin ./aoe2-lsp -dir <каталог-с-.rms>
   transport) — это отказ парсера на реальном скрипте, а не просто диагностика.
 - `-json` — машиночитаемый отчёт вместо сводки.
 
+Если Go на машине не установлен, тот же протокол повторяет stdio-клиент
+`tools/lsp-check.mjs` (нужен только node и бинарник `aoe2-lsp`):
+
+```sh
+node tools/lsp-check.mjs maps/ "$HOME/aoe2-lsp/aoe2-lsp.exe"
+```
+
+Сессия сервера на файл, initialize с `workspaceFolders`, didOpen, ожидание
+пуша диагностик (10 с) — как в `internal/corpus/runner.go`. Печатает
+диагностики по файлам; ненулевой код возврата при любых диагностиках или
+сбое сервера.
+
 **Цель — ноль диагностик, кроме известных.** Известные (принимаются, не чиним):
 ТЗ называет `effect_percent is deprecated` (легаси-команда; см.
 `docs/ref/map-scripting-practices.md` в `aoe-rms-lsp` — `effect_percent` →
@@ -44,6 +56,14 @@ go run ./cmd/corpus -bin ./aoe2-lsp -dir <каталог-с-.rms>
 ровно **146** диагностик, **все** одного кода `deprecated-effect-percent` —
 все в развёрнутом `includes/constants.inc` (блоки выравнивания объектов).
 Неизвестных диагностик — ноль.
+
+Вторая категория известных: **API новее prelude LSP**. Prelude в KB
+отстаёт от релизов: `xsGetMapTileAttribute`, `xsSetUnitOwner`,
+`xsSetUnitCaption`, `xsTaskUnits` (U185872) дают `undefined-symbol` на
+валидном для игры коде (ProbeMap.xs, 2026-11-18). Правило: сверять
+сигнатуру с `aoe2de-xs-rms-changelog.md` того же KB — если функция там
+есть, диагностика известная, код не трогаем; KB-лаг преlude — забота
+kb-refresh в репо aoe-rms-lsp, не наших карт.
 
 **Ловушка `#include_drs`.** `cmd/corpus` сообщает только hard-failures; число
 диагностик видно в `-json` (поле `Diagnostics` на файл). Но на картах, собранных
