@@ -42,8 +42,8 @@ if (!modId && !isNew) {
 	process.exit(2);
 }
 const zipPath = path.resolve(arg('--zip', 'dist/StandartRandom.zip'));
-let name = arg('--name', isNew ? '' : null); // resolved from portal Detail after fetch; do NOT default to another mod's name
-if (!name) {
+let name = arg('--name', isNew ? '' : null); // updates: resolved from portal Detail after fetch; do NOT default to another mod's name
+if (isNew && !name) {
 	console.error('Для нового мода задайте --name');
 	process.exit(2);
 }
